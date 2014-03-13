@@ -1,9 +1,11 @@
+import javax.swing.text.html.StyleSheet;
+
 class BasicCalendar{
 	
 	public static final int ROWS = 6;
 	public static final int COLUMNS = 7;
 	public static final int PADDING = 3;
-	public static final String FORMAT = "%" + PADDING + "s";
+	public static final String FORMAT = "%-" + PADDING + "s";
 	
 	private DateAD startDay;
 	private int[][] calendarArray = new int[ROWS][COLUMNS];
@@ -27,18 +29,18 @@ class BasicCalendar{
 
 	
 	private void setArray(){
-		short dayOfWeek = startDay.getDayOfWeek();
-		short daysInMonth = DateAD.daysInMonth((short) (startDay.getMonth()), startDay.getYear());
+		short firstDayOfMonth = startDay.getDayOfWeek();
+		short lastDayOfMonth = (short) (firstDayOfMonth  + DateAD.daysInMonth((short) (startDay.getMonth()), startDay.getYear()));
 
-		short start = (short) (dayOfWeek + 1);
-		short stop = (short) (dayOfWeek + daysInMonth);
+		//short start = (short) (dayOfWeek);
+		//short stop = (short) (dayOfWeek + daysInMonth);
 		short dayCount = 1;
 		short counter = 0;
 
 		
 		for (int i = 0; i< ROWS; i++){
 			for(int j = 0 ; j< COLUMNS; j++){
-				if (counter >= start && counter <= stop){
+				if (counter >= firstDayOfMonth && counter <= lastDayOfMonth){
 					calendarArray[i][j] = dayCount;
 					dayCount++;
 				}
@@ -67,7 +69,8 @@ class BasicCalendar{
 	
 	@Override
 	public String toString(){
-		String monYrTxt = DateAD.MONTHS[startDay.getMonth() - 1] + "  " + startDay.getYear();
+		
+		String monYrTxt = DateAD.MONTH_NAMES[startDay.getMonth() - 1] + "  " + startDay.getYear();
 		
 		String weekDayHeader = "";
 		
@@ -76,18 +79,28 @@ class BasicCalendar{
 		String[] weekArray = {"Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"};
 		
 		for (String day : weekArray){
-			weekDayHeader += String.format(FORMAT, day);
+			//weekDayHeader += String.format(FORMAT, day);
+			weekDayHeader += day + "  " ;
 		}
 		
 		
 		for( int[] week : getCalendarArray()){
 			for (int day : week){
-				String days;
+				String days = " ";
 				if (day == 0 ){
-					days = String.format(FORMAT,"");
+					//days = String.format(FORMAT,"");
+					days += " ";
 				}
 				else{
-					days = String.format(FORMAT,String.valueOf(day)) ;
+					//days = String.format(FORMAT,String.valueOf(day)) ;
+					days += day;
+				}
+				
+				if(day < 10){
+					days += "  ";
+				}
+				else{
+					days += " ";
 				}
 				monthString += days;
 			}
